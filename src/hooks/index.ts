@@ -1,2 +1,2 @@
 // Custom hooks para la aplicación
-export { };
+export { useTheme } from './useTheme';

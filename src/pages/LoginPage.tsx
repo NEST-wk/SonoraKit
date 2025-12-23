@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LiquidEther from '../components/LiquidEther';
 import AnimatedContent from '../components/AnimatedContent';
@@ -21,7 +21,7 @@ const LoginPage: React.FC = () => {
 
     const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
-        
+
         // Validaciones básicas
         if (formData.password.length < 6) {
             alert('La contraseña debe tener al menos 6 caracteres');
@@ -61,46 +61,42 @@ const LoginPage: React.FC = () => {
         navigate('/register');
     }, [navigate]);
 
-    const liquidEtherProps = useMemo(() => ({
-        className: "login-background",
-        colors: ['#5227FF', '#FF9FFC', '#B19EEF'],
-        mouseForce: 15,
-        cursorSize: 80,
-        isViscous: false,
-        viscous: 20,
-        iterationsViscous: 16,
-        iterationsPoisson: 16,
-        resolution: 0.3,
-        isBounce: false,
-        autoDemo: true,
-        autoSpeed: 0.4,
-        autoIntensity: 1.8,
-        takeoverDuration: 0.25,
-        autoResumeDelay: 3000,
-        autoRampDuration: 0.6
-    }), []);
-
-    const animatedContentProps = useMemo(() => ({
-        distance: 150,
-        direction: 'horizontal' as const,
-        reverse: false,
-        duration: 1.2,
-        ease: "bounce.out",
-        initialOpacity: 0.2,
-        animateOpacity: true,
-        scale: 1.1,
-        threshold: 0.2,
-        delay: 0.3,
-        className: "login-animated-wrapper"
-    }), []);
-
     return (
         <div className="login-container">
-            <LiquidEther {...liquidEtherProps} />
+            <LiquidEther
+                className="login-background"
+                colors={['#5227FF', '#FF9FFC', '#B19EEF']}
+                mouseForce={15}
+                cursorSize={80}
+                isViscous={false}
+                viscous={20}
+                iterationsViscous={16}
+                iterationsPoisson={16}
+                resolution={0.3}
+                isBounce={false}
+                autoDemo={true}
+                autoSpeed={0.4}
+                autoIntensity={1.8}
+                takeoverDuration={0.25}
+                autoResumeDelay={3000}
+                autoRampDuration={0.6}
+            />
 
-            <AnimatedContent {...animatedContentProps}>
+            <AnimatedContent
+                distance={150}
+                direction="horizontal"
+                reverse={false}
+                duration={1.2}
+                ease="bounce.out"
+                initialOpacity={0.2}
+                animateOpacity={true}
+                scale={1.1}
+                threshold={0.2}
+                delay={0.3}
+                className="login-animated-wrapper"
+            >
                 <div className="login-content">
-                    <button 
+                    <button
                         className="back-button"
                         onClick={handleBackClick}
                         aria-label="Volver"

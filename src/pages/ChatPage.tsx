@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DarkVeil from '../components/DarkVeil';
+import { useTheme } from '../hooks/useTheme';
 import Logo from '../assets/logos/file.svg';
 import './ChatPage.css';
 
@@ -29,6 +30,7 @@ interface Model {
 
 const ChatPage: React.FC = () => {
     const navigate = useNavigate();
+    const { currentTheme } = useTheme();
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -240,12 +242,7 @@ const ChatPage: React.FC = () => {
             <main className="chat-main">
                 {/* Background DarkVeil */}
                 <div className="chat-background">
-                    <DarkVeil
-                        speed={1.2}
-                        hueShift={280}
-                        warpAmount={0.2}
-                        scanlineIntensity={0.3}
-                    />
+                    <DarkVeil {...currentTheme.darkVeil} />
                 </div>
 
                 <div className="chat-messages">

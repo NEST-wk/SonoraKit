@@ -6,6 +6,17 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
+}
+
+.profile-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
 }
 
 /* Navbar */
@@ -20,6 +31,8 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .profile-title {
@@ -66,6 +79,8 @@
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
+    position: relative;
+    z-index: 1;
 }
 
 /* Scrollbar styling */
@@ -540,5 +555,13 @@
 
     .action-btn {
         width: 100%;
+    }
+
+    .profile-page .theme-customizer-toggle {
+        top: 90px;
+    }
+
+    .profile-page .theme-customizer {
+        top: 90px;
     }
 }

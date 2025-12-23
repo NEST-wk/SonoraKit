@@ -10,10 +10,12 @@
 .chat-sidebar {
     width: 260px;
     background: rgba(255, 255, 255, 0.05);
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: none;
     display: flex;
     flex-direction: column;
     backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
 }
 
 .sidebar-header {
@@ -451,6 +453,17 @@
     transition: all 0.3s ease;
 }
 
+/* Theme Customizer positioning for chat page */
+.chat-page .theme-customizer-toggle {
+    top: 20px;
+    right: 280px;
+}
+
+.chat-page .theme-customizer {
+    top: 20px;
+    right: 280px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .chat-sidebar {
@@ -463,5 +476,15 @@
 
     .chat-input-container {
         padding: 1rem;
+    }
+
+    .chat-page .theme-customizer-toggle {
+        right: 20px;
+        top: 90px;
+    }
+
+    .chat-page .theme-customizer {
+        right: 20px;
+        top: 90px;
     }
 }

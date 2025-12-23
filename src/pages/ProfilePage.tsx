@@ -1,9 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import DarkVeil from '../components/DarkVeil';
+import { useTheme } from '../hooks/useTheme';
 import './ProfilePage.css';
 
 const ProfilePage: React.FC = () => {
     const navigate = useNavigate();
+    const { currentTheme } = useTheme();
 
     const handleBack = () => {
         navigate('/chat');
@@ -11,6 +14,9 @@ const ProfilePage: React.FC = () => {
 
     return (
         <div className="profile-page">
+            <div className="profile-background">
+                <DarkVeil {...currentTheme.darkVeil} />
+            </div>
             {/* Header/Navbar */}
             <div className="profile-navbar">
                 <button className="back-button" onClick={handleBack}>

@@ -1,0 +1,46 @@
+import './App.css'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { lazy, Suspense } from 'react'
+import { ThemeProvider } from './contexts/ThemeContext'
+
+// Lazy loading de componentes de página
+const LandingPage = lazy(() => import('./pages/LandingPage'))
+const RegisterPage = lazy(() => import('./pages/RegisterPage'))
+const LoginPage = lazy(() => import('./pages/LoginPage'))
+const ChatPage = lazy(() => import('./pages/ChatPage'))
+const ProfilePage = lazy(() => import('./pages/ProfilePage'))
+
+// Componente de carga mientras se cargan las páginas
+const LoadingFallback = () => (
+    <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
+        color: 'white',
+        fontSize: '1.5rem'
+    }}>
+        Cargando...
+    </div>
+);
+
+function App() {
+    return (
+        <ThemeProvider>
+            <Router>
+                <Suspense fallback={<LoadingFallback />}>
+                    <Routes>
+                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/register" element={<RegisterPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/chat" element={<ChatPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
+                    </Routes>
+                </Suspense>
+            </Router>
+        </ThemeProvider>
+    )
+}
+
+export default App

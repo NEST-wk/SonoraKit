@@ -1,5 +1,7 @@
 // Theme configuration types for SonoraKit
 export interface DarkVeilConfig {
+    baseColor1: string;
+    baseColor2: string;
     hueShift: number;
     noiseIntensity: number;
     scanlineIntensity: number;
@@ -7,6 +9,7 @@ export interface DarkVeilConfig {
     scanlineFrequency: number;
     warpAmount: number;
     resolutionScale: number;
+    verticalPosition: number; // -100 a 100, 0 es centro
 }
 
 export interface LiquidEtherConfig {
@@ -55,13 +58,16 @@ export const defaultTheme: ThemeConfig = {
     name: 'Default',
     description: 'Tema clásico de SonoraKit con tonos púrpura y rosa',
     darkVeil: {
+        baseColor1: '#5227FF',
+        baseColor2: '#FF9FFC',
         hueShift: 0,
         noiseIntensity: 0,
         scanlineIntensity: 0,
         speed: 0.5,
         scanlineFrequency: 0,
         warpAmount: 0,
-        resolutionScale: 1
+        resolutionScale: 1,
+        verticalPosition: 0
     },
     liquidEther: {
         mouseForce: 20,
@@ -103,13 +109,16 @@ export const presetThemes: ThemeConfig[] = [
         name: 'Ocean Deep',
         description: 'Profundidades marinas con tonos azules y verdes tranquilos',
         darkVeil: {
+            baseColor1: '#0077BE',
+            baseColor2: '#48CAE4',
             hueShift: 180,
             noiseIntensity: 0.02,
             scanlineIntensity: 0.1,
             speed: 0.4,
             scanlineFrequency: 0.2,
             warpAmount: 0.6,
-            resolutionScale: 1
+            resolutionScale: 1,
+            verticalPosition: 0
         },
         liquidEther: {
             mouseForce: 18,
@@ -148,13 +157,16 @@ export const presetThemes: ThemeConfig[] = [
         name: 'Royal Purple',
         description: 'Elegancia real con púrpuras profundos y detalles dorados',
         darkVeil: {
+            baseColor1: '#5A189A',
+            baseColor2: '#E0AAFF',
             hueShift: 270,
             noiseIntensity: 0.03,
             scanlineIntensity: 0.12,
             speed: 0.7,
             scanlineFrequency: 0.3,
             warpAmount: 0.4,
-            resolutionScale: 1
+            resolutionScale: 1,
+            verticalPosition: 0
         },
         liquidEther: {
             mouseForce: 25,

@@ -17,6 +17,7 @@
     height: 100%;
     z-index: 0;
     pointer-events: none;
+    overflow: hidden;
 }
 
 /* Navbar */
@@ -27,9 +28,8 @@
     gap: 1rem;
     padding: 1.25rem 3rem;
     min-height: 80px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--theme-surface, rgb(20, 20, 35));
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     flex-shrink: 0;
     position: relative;
     z-index: 1;
@@ -47,7 +47,7 @@
 }
 
 .back-button {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.08));
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     color: white;
@@ -62,7 +62,7 @@
 }
 
 .back-button:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.12));
     border-color: rgba(255, 255, 255, 0.2);
     transform: translateX(-4px);
 }
@@ -89,7 +89,7 @@
 }
 
 .profile-main::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.05));
     border-radius: 10px;
 }
 
@@ -114,12 +114,11 @@
 }
 
 .profile-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--theme-surface, rgb(20, 20, 35));
     border-radius: 20px;
     padding: 2.5rem 2rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
-    backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -162,11 +161,11 @@
 }
 
 .stats-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--theme-surface, rgb(20, 20, 35));
     border-radius: 20px;
     padding: 2rem 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
+
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -212,11 +211,10 @@
 
 /* Dashboard Section */
 .dashboard-section {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--theme-surface, rgb(20, 20, 35));
     border-radius: 20px;
     padding: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     width: 100%;
@@ -241,7 +239,7 @@
 }
 
 .dashboard-card {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.03));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 15px;
     padding: 1.5rem;
@@ -255,7 +253,7 @@
 }
 
 .dashboard-card:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.08));
     border-color: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
 }
@@ -303,11 +301,10 @@
 
 /* Info Section */
 .info-section {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--theme-surface, rgb(20, 20, 35));
     border-radius: 20px;
     padding: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     width: 100%;
@@ -338,7 +335,7 @@
     width: 100%;
     min-width: 0;
     padding: 0.875rem 1rem;
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.08));
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 12px;
     color: white;
@@ -350,7 +347,7 @@
 .info-field input:focus {
     outline: none;
     border-color: rgba(102, 126, 234, 0.5);
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.12));
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -360,11 +357,10 @@
 
 /* Security Section */
 .security-section {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--theme-surface, rgb(20, 20, 35));
     border-radius: 20px;
     padding: 2.5rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     width: 100%;
@@ -383,7 +379,7 @@
     align-items: center;
     gap: 1.5rem;
     padding: 1.5rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.03));
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 15px;
     transition: all 0.3s ease;
@@ -391,7 +387,7 @@
 }
 
 .security-item:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.06));
     border-color: rgba(255, 255, 255, 0.12);
 }
 
@@ -430,12 +426,12 @@
 }
 
 .action-btn.secondary {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.08));
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .action-btn.secondary:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.12));
     box-shadow: none;
 }
 
@@ -471,14 +467,14 @@
 }
 
 .cancel-btn-main {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.08));
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
     padding: 1rem 1.5rem;
 }
 
 .cancel-btn-main:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--theme-surface, rgba(255, 255, 255, 0.12));
     border-color: rgba(255, 255, 255, 0.2);
 }
 

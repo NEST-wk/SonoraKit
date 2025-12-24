@@ -18,6 +18,7 @@ uniform float uNoise;
 uniform float uScan;
 uniform float uScanFreq;
 uniform float uWarp;
+uniform float uVerticalOffset;
 #define iTime uTime
 #define iResolution uResolution
 
@@ -60,6 +61,8 @@ vec4 cppn_fn(vec2 coordinate,float in0,float in1,float in2){
 void mainImage(out vec4 fragColor,in vec2 fragCoord){
     vec2 uv=fragCoord/uResolution.xy*2.-1.;
     uv.y*=-1.;
+    // Aplicar offset vertical al efecto
+    uv.y += uVerticalOffset;
     uv+=uWarp*vec2(sin(uv.y*6.283+uTime*0.5),cos(uv.x*6.283+uTime*0.5))*0.05;
     fragColor=cppn_fn(uv,0.1*sin(0.3*uTime),0.1*sin(0.69*uTime),0.1*sin(0.44*uTime));
 }
@@ -82,6 +85,7 @@ type Props = {
     scanlineFrequency?: number;
     warpAmount?: number;
     resolutionScale?: number;
+    verticalPosition?: number;
 };
 
 export default function DarkVeil({
@@ -91,7 +95,8 @@ export default function DarkVeil({
     speed = 0.5,
     scanlineFrequency = 0,
     warpAmount = 0,
-    resolutionScale = 1
+    resolutionScale = 1,
+    verticalPosition = 0
 }: Props) {
     const ref = useRef<HTMLCanvasElement>(null);
     useEffect(() => {
@@ -116,7 +121,8 @@ export default function DarkVeil({
                 uNoise: { value: noiseIntensity },
                 uScan: { value: scanlineIntensity },
                 uScanFreq: { value: scanlineFrequency },
-                uWarp: { value: warpAmount }
+                uWarp: { value: warpAmount },
+                uVerticalOffset: { value: verticalPosition / 100 }
             }
         });
 
@@ -142,6 +148,7 @@ export default function DarkVeil({
             program.uniforms.uScan.value = scanlineIntensity;
             program.uniforms.uScanFreq.value = scanlineFrequency;
             program.uniforms.uWarp.value = warpAmount;
+            program.uniforms.uVerticalOffset.value = verticalPosition / 100;
             renderer.render({ scene: mesh });
             frame = requestAnimationFrame(loop);
         };
@@ -152,6 +159,7 @@ export default function DarkVeil({
             cancelAnimationFrame(frame);
             window.removeEventListener('resize', resize);
         };
-    }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
+    }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale, verticalPosition]);
+
     return <canvas ref={ref} className="darkveil-canvas" />;
 }

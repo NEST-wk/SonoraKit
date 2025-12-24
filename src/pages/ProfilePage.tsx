@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import DarkVeil from '../components/DarkVeil';
+import MinimalMenu from '../components/MinimalMenu';
 import { useTheme } from '../hooks/useTheme';
 import './ProfilePage.css';
 
@@ -142,6 +143,13 @@ const ProfilePage: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Menú minimalista */}
+            <MinimalMenu
+                onNavigateToChat={handleBack}
+                showProfileOption={false}
+                showChatOption={true}
+            />
         </div>
     );
 };

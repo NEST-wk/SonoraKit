@@ -2,7 +2,6 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { lazy, Suspense } from 'react'
 import { ThemeProvider } from './contexts/ThemeContext'
-import ThemeCustomizer from './components/ThemeCustomizer'
 
 // Lazy loading de componentes de página
 const LandingPage = lazy(() => import('./pages/LandingPage'))
@@ -30,7 +29,6 @@ function App() {
     return (
         <ThemeProvider>
             <Router>
-                <ThemeCustomizer />
                 <Suspense fallback={<LoadingFallback />}>
                     <Routes>
                         <Route path="/" element={<LandingPage />} />

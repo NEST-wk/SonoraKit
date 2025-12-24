@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DarkVeil from '../components/DarkVeil';
+import MinimalMenu from '../components/MinimalMenu';
 import { useTheme } from '../hooks/useTheme';
 import Logo from '../assets/logos/file.svg';
 import './ChatPage.css';
@@ -360,6 +361,13 @@ const ChatPage: React.FC = () => {
                     </div>
                 </div>
             )}
+
+            {/* Menú minimalista */}
+            <MinimalMenu
+                onNavigateToProfile={handleViewProfile}
+                showProfileOption={true}
+                showChatOption={false}
+            />
         </div>
     );
 };

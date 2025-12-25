@@ -45,12 +45,26 @@ const ChatPage: React.FC = () => {
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [showConfig, setShowConfig] = useState(false);
-    const [modelConfig, setModelConfig] = useState<ModelConfig>({
-        provider: '',
-        model: '',
-        apiKey: ''
+    
+    // Inicializar showConfig basándose en si existe configuración guardada
+    const [showConfig, setShowConfig] = useState(() => {
+        const savedConfig = localStorage.getItem('modelConfig');
+        return !savedConfig; // Mostrar solo si NO hay configuración guardada
     });
+    
+    // Inicializar modelConfig desde localStorage
+    const [modelConfig, setModelConfig] = useState<ModelConfig>(() => {
+        const savedConfig = localStorage.getItem('modelConfig');
+        if (savedConfig) {
+            return JSON.parse(savedConfig);
+        }
+        return {
+            provider: '',
+            model: '',
+            apiKey: ''
+        };
+    });
+    
     const [providers, setProviders] = useState<Provider[]>([]);
     const [availableModels, setAvailableModels] = useState<Model[]>([]);
     const [loadingModels, setLoadingModels] = useState(false);
@@ -59,16 +73,8 @@ const ChatPage: React.FC = () => {
     const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
-    // Cargar conversaciones y configuración guardadas al iniciar
+    // Cargar conversaciones guardadas al iniciar
     useEffect(() => {
-        // Cargar configuración del modelo
-        const savedConfig = localStorage.getItem('modelConfig');
-        if (savedConfig) {
-            setModelConfig(JSON.parse(savedConfig));
-        } else {
-            setShowConfig(true);
-        }
-
         // Cargar conversaciones
         const savedConversations = localStorage.getItem('conversations');
         if (savedConversations) {

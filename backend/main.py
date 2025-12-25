@@ -1,11 +1,11 @@
 # SonoraKit Backend - Universal AI API Proxy
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Header
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 import httpx
-from auth import authenticate_user, register_user
+from auth import authenticate_user, register_user, supabase
 
 app = FastAPI(title="SonoraKit API", version="0.1.0")
 
@@ -60,6 +60,18 @@ class AuthResponse(BaseModel):
     success: bool
     user: Optional[Dict[str, str]] = None
     message: str
+
+
+class UserConfigRequest(BaseModel):
+    provider: str
+    model: str
+    apiKey: str
+
+
+class UserConfigResponse(BaseModel):
+    provider: str
+    model: str
+    apiKey: str
 
 
 # Provider configurations
@@ -404,6 +416,95 @@ async def register(request: RegisterRequest):
             success=False,
             message="Email already exists"
         )
+
+
+# Helper function to get user from authorization token
+def get_user_from_token(authorization: Optional[str] = None) -> str:
+    """Extract user ID from Supabase JWT token"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(
+            status_code=401, detail="Missing or invalid authorization header")
+
+    token = authorization.replace("Bearer ", "")
+
+    try:
+        # Verify token with Supabase
+        user = supabase.auth.get_user(token)
+        if not user or not user.user:
+            raise HTTPException(status_code=401, detail="Invalid token")
+        return user.user.id
+    except Exception as e:
+        raise HTTPException(
+            status_code=401, detail=f"Authentication failed: {str(e)}")
+
+
+# Config Endpoints
+@app.get("/api/config", response_model=Optional[UserConfigResponse])
+async def get_user_config(authorization: str = Header(None)):
+    """Get user's model configuration"""
+    user_id = get_user_from_token(authorization)
+
+    try:
+        response = supabase.table('user_configs').select(
+            '*').eq('user_id', user_id).execute()
+
+        if response.data and len(response.data) > 0:
+            config = response.data[0]
+            return UserConfigResponse(
+                provider=config['provider'],
+                model=config['model'],
+                apiKey=config['api_key']
+            )
+        return None
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error fetching config: {str(e)}")
+
+
+@app.post("/api/config")
+async def save_user_config(config: UserConfigRequest, authorization: str = Header(None)):
+    """Save or update user's model configuration"""
+    user_id = get_user_from_token(authorization)
+
+    try:
+        # Check if config exists
+        existing = supabase.table('user_configs').select(
+            'id').eq('user_id', user_id).execute()
+
+        if existing.data and len(existing.data) > 0:
+            # Update existing config
+            supabase.table('user_configs').update({
+                'provider': config.provider,
+                'model': config.model,
+                'api_key': config.apiKey
+            }).eq('user_id', user_id).execute()
+        else:
+            # Insert new config
+            supabase.table('user_configs').insert({
+                'user_id': user_id,
+                'provider': config.provider,
+                'model': config.model,
+                'api_key': config.apiKey
+            }).execute()
+
+        return {"success": True, "message": "Configuration saved"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error saving config: {str(e)}")
+
+
+@app.delete("/api/config")
+async def delete_user_config(authorization: str = Header(None)):
+    """Delete user's model configuration"""
+    user_id = get_user_from_token(authorization)
+
+    try:
+        supabase.table('user_configs').delete().eq(
+            'user_id', user_id).execute()
+        return {"success": True, "message": "Configuration deleted"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error deleting config: {str(e)}")
 
 
 @app.post("/api/chat", response_model=ChatResponse)

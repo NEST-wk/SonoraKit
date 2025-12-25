@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import DarkVeil from '../components/DarkVeil';
 import MinimalMenu from '../components/MinimalMenu';
 import { useTheme } from '../hooks/useTheme';
+import { configService } from '../services/configService';
 import Logo from '../assets/logos/file.svg';
 import './ChatPage.css';
 
@@ -46,23 +47,14 @@ const ChatPage: React.FC = () => {
     const [inputMessage, setInputMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     
-    // Inicializar showConfig basándose en si existe configuración guardada
-    const [showConfig, setShowConfig] = useState(() => {
-        const savedConfig = localStorage.getItem('modelConfig');
-        return !savedConfig; // Mostrar solo si NO hay configuración guardada
-    });
+    // Inicializar showConfig - se determinará después de cargar desde BD
+    const [showConfig, setShowConfig] = useState(false);
     
-    // Inicializar modelConfig desde localStorage
-    const [modelConfig, setModelConfig] = useState<ModelConfig>(() => {
-        const savedConfig = localStorage.getItem('modelConfig');
-        if (savedConfig) {
-            return JSON.parse(savedConfig);
-        }
-        return {
-            provider: '',
-            model: '',
-            apiKey: ''
-        };
+    // Inicializar modelConfig vacío - se cargará desde BD
+    const [modelConfig, setModelConfig] = useState<ModelConfig>({
+        provider: '',
+        model: '',
+        apiKey: ''
     });
     
     const [providers, setProviders] = useState<Provider[]>([]);
@@ -72,6 +64,21 @@ const ChatPage: React.FC = () => {
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    // Cargar configuración desde BD al iniciar
+    useEffect(() => {
+        const loadConfig = async () => {
+            const config = await configService.getConfig();
+            if (config) {
+                setModelConfig(config);
+                setShowConfig(false);
+            } else {
+                setShowConfig(true); // Mostrar modal si no hay config
+            }
+        };
+        
+        loadConfig();
+    }, []);
 
     // Cargar conversaciones guardadas al iniciar
     useEffect(() => {
@@ -298,24 +305,23 @@ const ChatPage: React.FC = () => {
         }
     }, [handleSendMessage]);
 
-    const handleSaveConfig = useCallback(() => {
+    const handleSaveConfig = useCallback(async () => {
         if (!modelConfig.apiKey || !modelConfig.provider || !modelConfig.model) {
             alert('Por favor completa todos los campos');
             return;
         }
-        localStorage.setItem('modelConfig', JSON.stringify(modelConfig));
-        setShowConfig(false);
-    }, [modelConfig]);
-
-    // Guardar configuración automáticamente cuando cambia (si está completa)
-    useEffect(() => {
-        if (modelConfig.apiKey && modelConfig.provider && modelConfig.model) {
-            localStorage.setItem('modelConfig', JSON.stringify(modelConfig));
+        
+        const success = await configService.saveConfig(modelConfig);
+        if (success) {
+            setShowConfig(false);
+            alert('Configuración guardada exitosamente');
+        } else {
+            alert('Error al guardar la configuración');
         }
     }, [modelConfig]);
 
-    const handleLogout = useCallback(() => {
-        localStorage.removeItem('modelConfig');
+    const handleLogout = useCallback(async () => {
+        await configService.deleteConfig();
         navigate('/');
     }, [navigate]);
 

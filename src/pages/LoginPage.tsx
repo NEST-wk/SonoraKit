@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LiquidEther from '../components/LiquidEther';
 import AnimatedContent from '../components/AnimatedContent';
+import { authService } from '../services/authService';
 import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
@@ -29,27 +30,19 @@ const LoginPage: React.FC = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
+            const result = await authService.login(formData.email, formData.password);
 
-            const data = await response.json();
-
-            if (data.success) {
+            if (result.success && result.user) {
                 // Guardar usuario en localStorage
-                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('user', JSON.stringify(result.user));
                 // Redirigir al chat
                 navigate('/chat');
             } else {
-                alert(data.message || 'Error al iniciar sesión');
+                alert(result.message || 'Error al iniciar sesión');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error de conexión. Asegúrate de que el backend esté corriendo.');
+            alert('Error de conexión. Por favor intenta de nuevo.');
         }
     }, [formData, navigate]);
 

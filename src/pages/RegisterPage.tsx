@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LiquidEther from '../components/LiquidEther';
 import AnimatedContent from '../components/AnimatedContent';
+import { authService } from '../services/authService';
 import './RegisterPage.css';
 
 const RegisterPage: React.FC = () => {
@@ -36,29 +37,21 @@ const RegisterPage: React.FC = () => {
         }
 
         try {
-            const response = await fetch('http://localhost:8000/api/auth/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: formData.email,
-                    password: formData.password,
-                    username: formData.username
-                })
-            });
+            const result = await authService.register(
+                formData.email,
+                formData.password,
+                formData.username
+            );
 
-            const data = await response.json();
-
-            if (data.success) {
+            if (result.success) {
                 alert('Registro exitoso. Ahora puedes iniciar sesión.');
                 navigate('/login');
             } else {
-                alert(data.message || 'Error al registrarse');
+                alert(result.message || 'Error al registrarse');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Error de conexión. Asegúrate de que el backend esté corriendo.');
+            alert('Error de conexión. Por favor intenta de nuevo.');
         }
     }, [formData, navigate]);
 

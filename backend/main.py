@@ -12,7 +12,7 @@ app = FastAPI(title="SonoraKit API", version="0.1.0")
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["*"],  # Permite todos los orígenes
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

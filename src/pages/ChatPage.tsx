@@ -65,10 +65,10 @@ const ChatPage: React.FC = () => {
         if (savedConversations) {
             const parsed = JSON.parse(savedConversations);
             // Convertir strings de fecha a objetos Date
-            const conversationsWithDates = parsed.map((conv: any) => ({
+            const conversationsWithDates = parsed.map((conv: Conversation) => ({
                 ...conv,
                 lastUpdated: new Date(conv.lastUpdated),
-                messages: conv.messages.map((msg: any) => ({
+                messages: conv.messages.map((msg: Message) => ({
                     ...msg,
                     timestamp: new Date(msg.timestamp)
                 }))
@@ -84,14 +84,7 @@ const ChatPage: React.FC = () => {
         }
     }, []);
 
-    // Guardar conversación actual cuando cambian los mensajes
-    useEffect(() => {
-        if (messages.length > 0) {
-            saveCurrentConversation();
-        }
-    }, [messages]);
-
-    const saveCurrentConversation = () => {
+    const saveCurrentConversation = useCallback(() => {
         if (messages.length === 0) return;
 
         const title = messages[0]?.content.slice(0, 50) || 'Nueva conversación';
@@ -115,7 +108,14 @@ const ChatPage: React.FC = () => {
 
         setConversations(updatedConversations);
         localStorage.setItem('conversations', JSON.stringify(updatedConversations));
-    };
+    }, [messages, conversations, currentConversationId]);
+
+    // Guardar conversación actual cuando cambian los mensajes
+    useEffect(() => {
+        if (messages.length > 0) {
+            saveCurrentConversation();
+        }
+    }, [messages, saveCurrentConversation]);
 
     const loadConversation = (conversationId: string) => {
         const conv = conversations.find(c => c.id === conversationId);
